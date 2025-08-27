@@ -1,0 +1,4 @@
+Round,Agent,Bid,Winning_Bid
+1,Agent 1,95,True
+1,Agent 2,100,False
+1,Agent 3,98,False
