@@ -39,45 +39,90 @@ class EnhancedBiddingPlatform:
     def run(self):
         """Main application runner."""
         
-                # Page configuration
+        # Page configuration
         st.set_page_config(
             page_title="Multi-Agent AI Bidding Simulator",
-            page_icon="🤖",
+            page_icon="📊",
             layout="wide",
             initial_sidebar_state="expanded"
         )
         
-        # Custom CSS
+        # Custom CSS for professional design
         st.markdown("""
         <style>
         .main-header {
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            padding: 1rem;
-            border-radius: 10px;
+            background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
+            padding: 2rem;
+            border-radius: 8px;
             color: white;
             text-align: center;
             margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .main-header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .main-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
         }
         .metric-card {
-            background: #f0f2f6;
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
         }
         .recommendation-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
-            padding: 1.5rem;
-            border-radius: 15px;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .recommendation-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .recommendation-box h2 {
+            font-size: 2.5rem;
             margin: 1rem 0;
+            font-weight: 700;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        .sidebar-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid #e9ecef;
+        }
+        .sidebar-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
         }
         </style>
         """, unsafe_allow_html=True)
         
-                # Header
+        # Header
         st.markdown("""
         <div class="main-header">
-            <h1>🤖 Multi-Agent AI Bidding Simulator</h1>
+            <h1>Multi-Agent AI Bidding Simulator</h1>
             <p>Advanced simulation platform for competitive bidding scenarios across any domain</p>
         </div>
         """, unsafe_allow_html=True)
@@ -91,7 +136,7 @@ class EnhancedBiddingPlatform:
     def _render_sidebar(self):
         """Render the sidebar with scenario configuration."""
         
-        st.sidebar.title("🎯 Scenario Configuration")
+        st.sidebar.title("Scenario Configuration")
         
         # Scenario management
         scenario_tab1, scenario_tab2 = st.sidebar.tabs(["Configure", "Manage"])
@@ -102,17 +147,17 @@ class EnhancedBiddingPlatform:
             st.session_state.scenario_config = scenario_config
             
             # Run simulation button
-            if st.sidebar.button("🚀 Run Simulation", type="primary", use_container_width=True):
+            if st.sidebar.button("Run Simulation", type="primary", use_container_width=True):
                 with st.spinner("Running AI simulation..."):
                     self._run_simulation(scenario_config)
         
         with scenario_tab2:
             # Scenario saving/loading
-            st.subheader("💾 Save/Load Scenarios")
+            st.subheader("Save/Load Scenarios")
             
             # Save current scenario
             scenario_name = st.text_input("Scenario Name:")
-            if st.button("💾 Save Scenario") and scenario_name and st.session_state.scenario_config:
+            if st.button("Save Scenario") and scenario_name and st.session_state.scenario_config:
                 self.scenario_config.save_scenario(st.session_state.scenario_config, scenario_name)
             
             # Load saved scenario
@@ -121,15 +166,15 @@ class EnhancedBiddingPlatform:
                 saved_scenarios = [f.replace('.json', '') for f in os.listdir(scenarios_dir) if f.endswith('.json')]
                 if saved_scenarios:
                     selected_scenario = st.selectbox("Load Saved Scenario:", saved_scenarios)
-                    if st.button("📂 Load Scenario"):
+                    if st.button("Load Scenario"):
                         loaded_config = self.scenario_config.load_scenario(selected_scenario)
                         if loaded_config:
                             st.session_state.scenario_config = loaded_config
-                            st.success(f"✅ Loaded scenario: {selected_scenario}")
+                            st.success(f"Loaded scenario: {selected_scenario}")
         
         # AI Assistant
         st.sidebar.markdown("---")
-        st.sidebar.subheader("🤖 AI Assistant")
+        st.sidebar.subheader("AI Assistant")
         
         # Initialize chat history in session state
         if 'chat_history' not in st.session_state:
@@ -148,11 +193,11 @@ class EnhancedBiddingPlatform:
             st.session_state.input_key = 0
         
         # Quick action buttons for common queries
-        st.sidebar.markdown("**💡 Quick Questions:**")
+        st.sidebar.markdown("**Quick Questions:**")
         col1, col2 = st.sidebar.columns(2)
         
         with col1:
-            if st.button("📊 Strategy", help="Ask about bidding strategies", key="strategy_btn"):
+            if st.button("Strategy", help="Ask about bidding strategies", key="strategy_btn"):
                 st.session_state.ai_loading = True
                 response = self._get_enhanced_ai_response("What's the best bidding strategy?")
                 st.session_state.current_response = response
@@ -161,7 +206,7 @@ class EnhancedBiddingPlatform:
                 st.session_state.input_key += 1
         
         with col2:
-            if st.button("🎯 Recommendations", help="Ask about AI recommendations", key="recommendations_btn"):
+            if st.button("Recommendations", help="Ask about AI recommendations", key="recommendations_btn"):
                 st.session_state.ai_loading = True
                 response = self._get_enhanced_ai_response("How do AI recommendations work?")
                 st.session_state.current_response = response
@@ -171,7 +216,7 @@ class EnhancedBiddingPlatform:
         
         col3, col4 = st.sidebar.columns(2)
         with col3:
-            if st.button("📈 Analysis", help="Ask about result analysis", key="analysis_btn"):
+            if st.button("Analysis", help="Ask about result analysis", key="analysis_btn"):
                 st.session_state.ai_loading = True
                 response = self._get_enhanced_ai_response("How do I analyze the results?")
                 st.session_state.current_response = response
@@ -180,7 +225,7 @@ class EnhancedBiddingPlatform:
                 st.session_state.input_key += 1
         
         with col4:
-            if st.button("⚙️ Setup", help="Ask about configuration", key="setup_btn"):
+            if st.button("Setup", help="Ask about configuration", key="setup_btn"):
                 st.session_state.ai_loading = True
                 response = self._get_enhanced_ai_response("How should I configure my scenario?")
                 st.session_state.current_response = response
@@ -190,19 +235,19 @@ class EnhancedBiddingPlatform:
         
         # Show loading indicator
         if st.session_state.ai_loading:
-            st.sidebar.info("🤖 AI is thinking... Please wait.")
+            st.sidebar.info("AI is processing your request...")
         
         # Collapsible chat history
         if st.session_state.chat_history:
-            with st.sidebar.expander("📚 Chat History", expanded=False):
+            with st.sidebar.expander("Chat History", expanded=False):
                 for i, message in enumerate(st.session_state.chat_history[:-1]):  # Show all except current
-                    st.markdown(f"**👤 You:** {message['user']}")
-                    st.markdown(f"**🤖 AI:** {message['assistant']}")
+                    st.markdown(f"**You:** {message['user']}")
+                    st.markdown(f"**AI:** {message['assistant']}")
                     if i < len(st.session_state.chat_history[:-1]) - 1:  # Don't add separator after last message
                         st.markdown("---")
         
         # Chat interface
-        st.sidebar.markdown("**💬 Chat with AI:**")
+        st.sidebar.markdown("**Chat with AI:**")
         
         # User input with form to prevent infinite loops
         with st.sidebar.form(key="chat_form"):
@@ -229,13 +274,13 @@ class EnhancedBiddingPlatform:
         
         # Show current response below input box
         if st.session_state.current_response and not st.session_state.ai_loading:
-            st.sidebar.markdown("**🤖 AI Response:**")
+            st.sidebar.markdown("**AI Response:**")
             st.sidebar.markdown(st.session_state.current_response)
             st.sidebar.markdown("---")
         
         # Proactive insights based on current state
         if st.session_state.simulation_data is not None:
-            st.sidebar.markdown("**💡 Proactive Insights:**")
+            st.sidebar.markdown("**Proactive Insights:**")
             insights = self._get_proactive_insights()
             for insight in insights:
                 st.sidebar.info(insight)
@@ -253,25 +298,25 @@ class EnhancedBiddingPlatform:
         """Render welcome screen when no simulation has been run."""
         
         st.markdown("""
-        ## 🎯 Welcome to Multi-Agent AI Bidding Simulator
+        ## Welcome to Multi-Agent AI Bidding Simulator
         
         This platform helps you simulate and analyze competitive bidding scenarios using advanced AI agents.
         
-        ### 🚀 How it works:
+        ### How it works:
         1. **Configure your scenario** in the sidebar
         2. **Upload historical data** (optional) for better insights
         3. **Run the simulation** with AI agents
         4. **Get optimal bid recommendations** based on market analysis
         5. **Explore detailed analytics** and insights
         
-        ### 🎯 Key Features:
+        ### Key Features:
         - **Multi-Agent AI Simulation**: Realistic competitor behavior
         - **Historical Data Integration**: Learn from past auctions
         - **Optimal Bid Recommendations**: AI-powered strategy suggestions
         - **Comprehensive Analytics**: Detailed market insights
         - **Explainable AI**: Understand why recommendations are made
         
-        ### 📊 What you'll get:
+        ### What you'll get:
         - Optimal bid value with confidence score
         - Win probability analysis
         - Market dynamics insights
@@ -285,7 +330,7 @@ class EnhancedBiddingPlatform:
         """)
         
         # Quick start example
-        with st.expander("📖 Quick Start Example"):
+        with st.expander("Quick Start Example"):
             st.markdown("""
             **Example Scenario:**
             - **Number of Bidders**: 5
@@ -300,7 +345,7 @@ class EnhancedBiddingPlatform:
         """Render simulation results and recommendations."""
         
         # Executive summary
-        st.markdown("## 📊 Simulation Results")
+        st.markdown("## Simulation Results")
         
         # Key metrics
         col1, col2, col3, col4 = st.columns(4)
@@ -342,11 +387,11 @@ class EnhancedBiddingPlatform:
         
         # Tabs for different views
         tab1, tab2, tab3, tab4, tab5 = st.tabs([
-            "📈 Bidding Trends", 
-            "🏆 Performance Analysis", 
-            "📊 Market Dynamics",
-            "🎯 Recommendation Details",
-            "📋 Executive Summary"
+            "Bidding Trends", 
+            "Performance Analysis", 
+            "Market Dynamics",
+            "Recommendation Details",
+            "Executive Summary"
         ])
         
         with tab1:
@@ -371,7 +416,7 @@ class EnhancedBiddingPlatform:
         
         st.markdown(f"""
         <div class="recommendation-box">
-            <h3>🎯 AI Recommendation</h3>
+            <h3>AI Recommendation</h3>
             <h2>${rec.recommended_bid:,.2f}</h2>
             <p><strong>Win Probability:</strong> {rec.win_probability:.1%} | 
                <strong>Confidence:</strong> {rec.confidence_score:.1%} | 
@@ -434,7 +479,7 @@ class EnhancedBiddingPlatform:
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("📥 Download Simulation Data"):
+            if st.button("Download Simulation Data"):
                 csv = st.session_state.simulation_data.to_csv(index=False)
                 st.download_button(
                     label="Download CSV",
@@ -444,7 +489,7 @@ class EnhancedBiddingPlatform:
                 )
         
         with col2:
-            if st.button("📄 Download Executive Summary"):
+            if st.button("Download Executive Summary"):
                 # Create a simple text summary
                 summary_text = f"""
                 AI-Powered Procurement Simulation Report
@@ -541,10 +586,10 @@ class EnhancedBiddingPlatform:
             
             st.session_state.recommendation = recommendation
             
-            st.success("✅ Simulation completed successfully!")
+            st.success("Simulation completed successfully!")
             
         except Exception as e:
-            st.error(f"❌ Simulation failed: {str(e)}")
+            st.error(f"Simulation failed: {str(e)}")
             st.exception(e)
     
     def _get_ai_response(self, query: str) -> str:
@@ -612,9 +657,9 @@ class EnhancedBiddingPlatform:
                 if has_simulation_data:
                     return self._get_strategy_response_with_context()
                 else:
-                    return """**🎯 Bidding Strategy Guide:**
+                    return """**Bidding Strategy Guide:**
 
-**Hybrid AI-RL Approach**: Our system combines Deep Q-Learning with GPT-4 insights for optimal decision-making.
+**Hybrid AI-RL Approach:** Our system combines Deep Q-Learning with GPT-4 insights for optimal decision-making.
 
 **Strategy Profiles:**
 - **Aggressive**: Lower bids, higher win probability, lower profit margins
@@ -634,7 +679,7 @@ class EnhancedBiddingPlatform:
                 if has_simulation_data:
                     return self._get_risk_analysis_with_context()
                 else:
-                    return """**⚠️ Risk Assessment Framework:**
+                    return """**Risk Assessment Framework:**
 
 **Risk Factors:**
 - **Market Volatility**: High bid variance indicates unstable market
@@ -658,7 +703,7 @@ class EnhancedBiddingPlatform:
                 if has_simulation_data:
                     return self._get_competitor_analysis_with_context()
                 else:
-                    return """**🏆 Competitor Analysis:**
+                    return """**Competitor Analysis:**
 
 **What We Track:**
 - Individual agent performance metrics
@@ -682,7 +727,7 @@ class EnhancedBiddingPlatform:
                 if has_simulation_data:
                     return self._get_results_analysis_with_context()
                 else:
-                    return """**📊 Results Analysis Guide:**
+                    return """**Results Analysis Guide:**
 
 **Key Metrics to Monitor:**
 - **Win Rates**: Success frequency for each agent
@@ -704,7 +749,7 @@ class EnhancedBiddingPlatform:
             
             # Configuration guidance
             elif any(word in query_lower for word in ["configure", "setup", "settings", "parameters", "scenario", "example", "test"]):
-                return """**⚙️ Scenario Configuration Guide:**
+                return """**Scenario Configuration Guide:**
 
 **Example Scenario for Testing:**
 - **Number of Bidders**: 5 (2 Aggressive, 2 Balanced, 1 Conservative)
@@ -740,7 +785,7 @@ class EnhancedBiddingPlatform:
                 if has_recommendation:
                     return self._get_recommendation_explanation_with_context()
                 else:
-                    return """**🎯 AI Recommendation System:**
+                    return """**AI Recommendation System:**
 
 **How It Works:**
 - Analyzes simulation outcomes and market dynamics
@@ -764,7 +809,7 @@ class EnhancedBiddingPlatform:
             
             # General help and guidance
             elif any(word in query_lower for word in ["help", "how", "what", "explain", "tell", "guide", "example", "test"]):
-                return """**🚀 How to Use This Platform:**
+                return """**How to Use This Platform:**
 
 **Step-by-Step Guide:**
 1. **Configure Scenario**: Set bidders, threshold, rounds in sidebar
@@ -796,15 +841,15 @@ class EnhancedBiddingPlatform:
             
             # Default response with suggestions
             else:
-                return """**🤖 I'm here to help with your bidding simulation!**
+                return """**I'm here to help with your bidding simulation!**
 
 **I can assist with:**
-- 📊 **Strategy guidance** and best practices
-- 🎯 **AI recommendations** and optimization
-- 📈 **Results analysis** and interpretation
-- ⚙️ **Configuration** and setup advice
-- ⚠️ **Risk assessment** and mitigation
-- 🏆 **Competitor analysis** and insights
+- **Strategy guidance** and best practices
+- **AI recommendations** and optimization
+- **Results analysis** and interpretation
+- **Configuration** and setup advice
+- **Risk assessment** and mitigation
+- **Competitor analysis** and insights
 
 **Try asking:**
 - "What's the best bidding strategy?"
@@ -826,7 +871,7 @@ class EnhancedBiddingPlatform:
         win_rate = (data['Winning_Bid'] == 1).mean()
         volatility = data['Bid'].std() / avg_bid
         
-        return f"""**🎯 Strategy Analysis (Based on Your Simulation):**
+        return f"""**Strategy Analysis (Based on Your Simulation):**
 
 **Current Market Conditions:**
 - Average Bid: ${avg_bid:,.0f}
@@ -853,7 +898,7 @@ class EnhancedBiddingPlatform:
         
         risk_level = "High" if volatility > 0.3 or competition > 7 else "Medium" if volatility > 0.15 or competition > 5 else "Low"
         
-        return f"""**⚠️ Risk Assessment (Based on Your Simulation):**
+        return f"""**Risk Assessment (Based on Your Simulation):**
 
 **Risk Factors:**
 - **Market Volatility**: {volatility:.1%} ({'High' if volatility > 0.3 else 'Medium' if volatility > 0.15 else 'Low'})
@@ -884,7 +929,7 @@ class EnhancedBiddingPlatform:
             
             agent_analysis.append(f"**{agent}**: {strategy} strategy, {win_rate:.1%} win rate, ${avg_bid:,.0f} avg bid")
         
-        return f"""**🏆 Competitor Analysis (Based on Your Simulation):**
+        return f"""**Competitor Analysis (Based on Your Simulation):**
 
 **Market Overview:**
 - Total Competitors: {len(data['Agent'].unique())}
@@ -904,7 +949,7 @@ class EnhancedBiddingPlatform:
         
         data = st.session_state.simulation_data
         
-        return f"""**📊 Results Analysis (Your Simulation):**
+        return f"""**Results Analysis (Your Simulation):**
 
 **Simulation Overview:**
 - Total Rounds: {len(data['Round'].unique())}
@@ -933,7 +978,7 @@ class EnhancedBiddingPlatform:
         
         rec = st.session_state.recommendation
         
-        return f"""**🎯 AI Recommendation Analysis (Your Results):**
+        return f"""**AI Recommendation Analysis (Your Results):**
 
 **Optimal Bid: ${rec.recommended_bid:,.2f}**
 - Win Probability: {rec.win_probability:.1%}
@@ -964,22 +1009,22 @@ class EnhancedBiddingPlatform:
             # Analyze win rate
             win_rate = (data['Winning_Bid'] == 1).mean()
             if win_rate < 0.2:
-                insights.append("⚠️ Low win rate detected. Consider more aggressive bidding strategy.")
+                insights.append("Low win rate detected. Consider more aggressive bidding strategy.")
             elif win_rate > 0.4:
-                insights.append("🎉 High win rate! Your strategy is performing well.")
+                insights.append("High win rate! Your strategy is performing well.")
             
             # Analyze volatility
             volatility = data['Bid'].std() / data['Bid'].mean()
             if volatility > 0.3:
-                insights.append("📈 High market volatility detected. Consider increasing AI weight for strategic guidance.")
+                insights.append("High market volatility detected. Consider increasing AI weight for strategic guidance.")
             
             # Analyze competition
             if len(data['Agent'].unique()) > 7:
-                insights.append("🏆 High competition detected. Focus on strategic positioning over aggressive bidding.")
+                insights.append("High competition detected. Focus on strategic positioning over aggressive bidding.")
             
             # Suggest more rounds
             if len(data['Round'].unique()) < 20:
-                insights.append("🔄 Consider running more rounds for better learning and insights.")
+                insights.append("Consider running more rounds for better learning and insights.")
         
         return insights
 
@@ -991,3 +1036,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+ 

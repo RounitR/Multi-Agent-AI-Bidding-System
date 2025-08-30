@@ -22,7 +22,7 @@ class EnhancedVisualization:
     def plot_bidding_trends_with_insights(self, df: pd.DataFrame, recommendation: Optional[Dict] = None):
         """Enhanced bidding trends with AI insights and recommendation overlay."""
         
-        st.subheader("📈 Bidding Trends with AI Insights")
+        st.subheader("Bidding Trends with AI Insights")
         
         # Create interactive plot
         fig = go.Figure()
@@ -83,7 +83,7 @@ class EnhancedVisualization:
     def plot_win_probability_heatmap(self, df: pd.DataFrame, recommendation: Optional[Dict] = None):
         """Win probability heatmap showing optimal bidding zones."""
         
-        st.subheader("🔥 Win Probability Heatmap")
+        st.subheader("Win Probability Heatmap")
         
         # Calculate win probabilities for different bid ranges
         bid_ranges = np.linspace(df['Bid'].min(), df['Bid'].max(), 20)
@@ -129,7 +129,7 @@ class EnhancedVisualization:
     def plot_agent_performance_dashboard(self, df: pd.DataFrame):
         """Comprehensive agent performance dashboard."""
         
-        st.subheader("🏆 Agent Performance Dashboard")
+        st.subheader("Agent Performance Dashboard")
         
         # Calculate performance metrics
         performance_data = []
@@ -188,13 +188,13 @@ class EnhancedVisualization:
         st.plotly_chart(fig, use_container_width=True)
         
         # Performance table
-        st.subheader("📊 Detailed Performance Metrics")
+        st.subheader("Detailed Performance Metrics")
         st.dataframe(perf_df.round(3))
     
     def plot_market_dynamics_analysis(self, df: pd.DataFrame):
         """Advanced market dynamics analysis."""
         
-        st.subheader("📊 Market Dynamics Analysis")
+        st.subheader("Market Dynamics Analysis")
         
         # Calculate market statistics over time
         market_stats = df.groupby('Round').agg({
@@ -259,7 +259,7 @@ class EnhancedVisualization:
     def plot_recommendation_analysis(self, recommendation: Dict):
         """Visualize bid recommendation analysis."""
         
-        st.subheader("🎯 AI Bid Recommendation Analysis")
+        st.subheader("AI Bid Recommendation Analysis")
         
         # Create recommendation summary
         col1, col2, col3, col4 = st.columns(4)
@@ -296,7 +296,7 @@ class EnhancedVisualization:
             )
         
         # Alternative bids comparison
-        st.subheader("📋 Alternative Bid Options")
+        st.subheader("Alternative Bid Options")
         
         alternatives = recommendation.get('alternative_bids', [])
         if alternatives:
@@ -341,7 +341,7 @@ class EnhancedVisualization:
             st.plotly_chart(fig, use_container_width=True)
         
         # AI Explanation - Technical Details
-        st.subheader("🤖 AI Explanation")
+        st.subheader("AI Explanation")
         
         # Create a more detailed technical explanation for recommendation details
         technical_explanation = self._generate_technical_explanation(recommendation, st.session_state.get('scenario_config'))
@@ -381,7 +381,7 @@ class EnhancedVisualization:
         **Cost-Based Analysis:**
         - Cost price: ${cost_price:.2f}
         - Recommended bid profit margin: {profit_margin:.1f}%
-        - Profitability status: {'✅ Profitable' if is_profitable else '❌ Below cost'}
+        - Profitability status: {'Profitable' if is_profitable else 'Below cost'}
         
         The recommendation {'ensures' if is_profitable else 'does not ensure'} cost coverage while maintaining competitive positioning.
         """
@@ -407,7 +407,7 @@ class EnhancedVisualization:
     def plot_historical_comparison(self, current_data: pd.DataFrame, historical_data: Optional[pd.DataFrame] = None):
         """Compare current simulation with historical data."""
         
-        st.subheader("📈 Historical Comparison Analysis")
+        st.subheader("Historical Comparison Analysis")
         
         if historical_data is None:
             st.warning("No historical data available for comparison.")
@@ -457,7 +457,7 @@ class EnhancedVisualization:
         st.plotly_chart(fig, use_container_width=True)
         
         # Trend analysis
-        st.subheader("📊 Trend Analysis")
+        st.subheader("Trend Analysis")
         
         # Compare bid distributions
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
@@ -476,7 +476,7 @@ class EnhancedVisualization:
     def _add_trend_insights(self, df: pd.DataFrame, recommendation: Optional[Dict] = None):
         """Add AI-powered insights about bidding trends."""
         
-        st.subheader("💡 AI-Powered Trend Insights")
+        st.subheader("AI-Powered Trend Insights")
         
         # Calculate insights
         insights = []
@@ -486,23 +486,23 @@ class EnhancedVisualization:
         late_bids = df[df['Round'] > df['Round'].max() // 2]['Bid'].mean()
         
         if late_bids < early_bids:
-            insights.append("📉 **Bidding is becoming more aggressive** - Agents are learning to bid lower over time.")
+            insights.append("**Bidding is becoming more aggressive** - Agents are learning to bid lower over time.")
         else:
-            insights.append("📈 **Bidding is becoming more conservative** - Agents are increasing their bids.")
+            insights.append("**Bidding is becoming more conservative** - Agents are increasing their bids.")
         
         # Competition analysis
         unique_bids_per_round = df.groupby('Round')['Bid'].nunique().mean()
         if unique_bids_per_round > len(df['Agent'].unique()) * 0.8:
-            insights.append("🎯 **High competition diversity** - Agents are using different strategies.")
+            insights.append("**High competition diversity** - Agents are using different strategies.")
         else:
-            insights.append("🔄 **Low competition diversity** - Agents are converging on similar strategies.")
+            insights.append("**Low competition diversity** - Agents are converging on similar strategies.")
         
         # Volatility analysis
         bid_volatility = df.groupby('Agent')['Bid'].std().mean()
         if bid_volatility > df['Bid'].std() * 0.5:
-            insights.append("⚡ **High agent volatility** - Some agents are experimenting with different strategies.")
+            insights.append("**High agent volatility** - Some agents are experimenting with different strategies.")
         else:
-            insights.append("📊 **Low agent volatility** - Agents are maintaining consistent strategies.")
+            insights.append("**Low agent volatility** - Agents are maintaining consistent strategies.")
         
         # Recommendation context
         if recommendation:
@@ -510,9 +510,9 @@ class EnhancedVisualization:
             current_avg = df['Bid'].mean()
             
             if optimal_bid < current_avg:
-                insights.append(f"💡 **Recommended bid ({optimal_bid:.2f}) is below market average** - This suggests an aggressive strategy could be effective.")
+                insights.append(f"**Recommended bid ({optimal_bid:.2f}) is below market average** - This suggests an aggressive strategy could be effective.")
             else:
-                insights.append(f"💡 **Recommended bid ({optimal_bid:.2f}) is above market average** - This suggests a conservative approach may be better.")
+                insights.append(f"**Recommended bid ({optimal_bid:.2f}) is above market average** - This suggests a conservative approach may be better.")
         
         # Display insights
         for insight in insights:
@@ -527,7 +527,7 @@ class EnhancedVisualization:
         cost_price = scenario_config.get('cost_price', None) if scenario_config else None
         
         summary = f"""
-        # 📊 Executive Summary
+        # Executive Summary
         
         ## Simulation Overview
         - **Total Rounds**: {df['Round'].max()}
@@ -588,7 +588,7 @@ class EnhancedVisualization:
                 
                 summary += f"""
         - **Profit Margin**: {profit_margin:.1f}%
-        - **Profitability**: {'✅ Profitable' if is_profitable else '❌ Below Cost'}
+        - **Profitability**: {'Profitable' if is_profitable else 'Below Cost'}
         """
             
             summary += f"""
@@ -638,7 +638,7 @@ class EnhancedVisualization:
         **Cost-Based Analysis:**
         - **Cost Price**: ${cost_price:.2f}
         - **Recommended Bid Profit Margin**: {profit_margin:.1f}%
-        - **Profitability Status**: {'✅ Profitable' if is_profitable else '❌ Below Cost'}
+        - **Profitability Status**: {'Profitable' if is_profitable else 'Below Cost'}
         
         The recommended bid {'covers your costs' if is_profitable else 'does not cover your costs'}. {'This ensures you won\'t lose money while remaining competitive.' if is_profitable else 'Consider adjusting your cost parameters for better profitability.'}
         """

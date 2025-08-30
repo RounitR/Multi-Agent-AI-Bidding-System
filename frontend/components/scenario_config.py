@@ -12,10 +12,10 @@ class ScenarioConfigurator:
     def render_configuration_panel(self) -> Dict[str, Any]:
         """Renders the scenario configuration panel in the sidebar."""
         
-        st.sidebar.header("🎯 Auction Scenario Configuration")
+        st.sidebar.header("Auction Scenario Configuration")
         
         # Market Parameters Section
-        st.sidebar.subheader("📊 Market Parameters")
+        st.sidebar.subheader("Market Parameters")
         
         # Number of bidders
         num_bidders = st.sidebar.number_input(
@@ -48,7 +48,7 @@ class ScenarioConfigurator:
         
         # Validate cost price
         if cost_price >= market_threshold:
-            st.sidebar.error("❌ Cost price cannot exceed market threshold!")
+            st.sidebar.error("Cost price cannot exceed market threshold!")
             return None
         
         # Auction rounds
@@ -61,7 +61,7 @@ class ScenarioConfigurator:
         )
         
         # Historical Data Section
-        st.sidebar.subheader("📈 Historical Data")
+        st.sidebar.subheader("Historical Data")
         
         # Option to upload historical data
         use_historical_data = st.sidebar.checkbox(
@@ -81,17 +81,17 @@ class ScenarioConfigurator:
             if uploaded_file is not None:
                 try:
                     historical_data = pd.read_csv(uploaded_file)
-                    st.sidebar.success(f"✅ Loaded {len(historical_data)} historical records")
+                    st.sidebar.success(f"Loaded {len(historical_data)} historical records")
                     
                     # Show preview
                     if st.sidebar.checkbox("Preview Historical Data"):
                         st.sidebar.dataframe(historical_data.head())
                         
                 except Exception as e:
-                    st.sidebar.error(f"❌ Error loading file: {e}")
+                    st.sidebar.error(f"Error loading file: {e}")
         
         # Agent Strategy Profiles Section
-        st.sidebar.subheader("🤖 Agent Strategy Profiles")
+        st.sidebar.subheader("Agent Strategy Profiles")
         
         # Strategy distribution
         aggressive_agents = st.sidebar.slider(
@@ -114,13 +114,13 @@ class ScenarioConfigurator:
         balanced_agents = num_bidders - aggressive_agents - conservative_agents
         
         if balanced_agents < 0:
-            st.sidebar.warning("⚠️ Total agents exceed number of bidders!")
+            st.sidebar.warning("Total agents exceed number of bidders!")
             balanced_agents = 0
         
-        st.sidebar.info(f"📊 Agent Distribution: {aggressive_agents} Aggressive, {balanced_agents} Balanced, {conservative_agents} Conservative")
+        st.sidebar.info(f"Agent Distribution: {aggressive_agents} Aggressive, {balanced_agents} Balanced, {conservative_agents} Conservative")
         
         # Advanced Settings
-        with st.sidebar.expander("⚙️ Advanced Settings"):
+        with st.sidebar.expander("Advanced Settings"):
             learning_rate = st.slider(
                 "Agent Learning Rate:",
                 min_value=0.01,
@@ -149,11 +149,11 @@ class ScenarioConfigurator:
             )
         
         # Validation
-        if st.sidebar.button("✅ Validate Configuration", type="primary"):
+        if st.sidebar.button("Validate Configuration", type="primary"):
             if self._validate_configuration(num_bidders, market_threshold, cost_price, auction_rounds):
-                st.sidebar.success("✅ Configuration is valid!")
+                st.sidebar.success("Configuration is valid!")
             else:
-                st.sidebar.error("❌ Configuration has issues!")
+                st.sidebar.error("Configuration has issues!")
         
         # Return configuration
         return {
@@ -179,19 +179,19 @@ class ScenarioConfigurator:
         """Validates the enhanced user configuration."""
         
         if num_bidders < 2:
-            st.error("❌ Need at least 2 bidders for a competitive auction")
+            st.error("Need at least 2 bidders for a competitive auction")
             return False
             
         if market_threshold <= 0:
-            st.error("❌ Market threshold must be positive")
+            st.error("Market threshold must be positive")
             return False
             
         if cost_price >= market_threshold:
-            st.error("❌ Cost price cannot exceed market threshold")
+            st.error("Cost price cannot exceed market threshold")
             return False
             
         if auction_rounds < 10:
-            st.error("❌ Need at least 10 rounds for meaningful learning")
+            st.error("Need at least 10 rounds for meaningful learning")
             return False
             
         return True
@@ -213,7 +213,7 @@ class ScenarioConfigurator:
         with open(scenario_file, "w") as f:
             json.dump(config, f, indent=4)
         
-        st.success(f"✅ Scenario '{scenario_name}' saved successfully!")
+        st.success(f"Scenario '{scenario_name}' saved successfully!")
     
     def load_scenario(self, scenario_name: str) -> Optional[Dict[str, Any]]:
         """Loads a saved scenario configuration."""
@@ -221,7 +221,7 @@ class ScenarioConfigurator:
         scenario_file = os.path.join("scenarios", f"{scenario_name}.json")
         
         if not os.path.exists(scenario_file):
-            st.error(f"❌ Scenario '{scenario_name}' not found!")
+            st.error(f"Scenario '{scenario_name}' not found!")
             return None
         
         import json
@@ -232,5 +232,5 @@ class ScenarioConfigurator:
         if config.get("historical_data") is not None:
             config["historical_data"] = pd.DataFrame(config["historical_data"])
         
-        st.success(f"✅ Scenario '{scenario_name}' loaded successfully!")
+        st.success(f"Scenario '{scenario_name}' loaded successfully!")
         return config
